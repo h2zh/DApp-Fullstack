@@ -1,0 +1,17 @@
+{
+  "_format": "hh-vy-cache-1",
+  "files": {
+    "/Users/evanyou/Library/CloudStorage/OneDrive-UW-Madison/SyncedDocuments/CS839-Blockchain/project/client/contracts/crowdfundingProject.vy": {
+      "lastModificationDate": 1682658783765,
+      "contentHash": "04bb464c0f56fb4f97b6e6ba84d57d55",
+      "sourceName": "contracts/crowdfundingProject.vy",
+      "vyperConfig": {
+        "version": "0.3.0"
+      },
+      "versionPragma": "*",
+      "artifacts": [
+        "crowdfundingProject"
+      ]
+    }
+  }
+}
