@@ -46,6 +46,12 @@ dependencies:
   classnames:
     specifier: ^2.3.2
     version: 2.3.2
+  cors:
+    specifier: ^2.8.5
+    version: 2.8.5
+  dotenv:
+    specifier: ^16.0.3
+    version: 16.0.3
   ethereum-waffle:
     specifier: ^4.0.10
     version: 4.0.10(@ensdomains/ens@0.4.5)(@ensdomains/resolver@0.2.4)(@ethersproject/abi@5.7.0)(@ethersproject/bytes@5.7.0)(@ethersproject/providers@5.7.2)(ethers@5.7.2)(typescript@5.0.4)
@@ -97,6 +103,9 @@ dependencies:
   react-redux:
     specifier: ^8.0.5
     version: 8.0.5(@types/react@17.0.38)(react-dom@18.2.0)(react@18.2.0)(redux@4.2.1)
+  redux-persist:
+    specifier: ^6.0.0
+    version: 6.0.0(react@18.2.0)(redux@4.2.1)
   wagmi:
     specifier: ^0.12.12
     version: 0.12.12(ethers@5.7.2)(immer@9.0.19)(react-dom@18.2.0)(react@18.2.0)(typescript@5.0.4)
@@ -6201,6 +6210,11 @@ packages:
     resolution: {integrity: sha512-6QvTW9mrGeIegrFXdtQi9pk7O/nSK6lSdXW2eqUspN5LWD7UTji2Fqw5V2YLjBpHEoU9Xl/eUWNpDeZvoyOv2w==}
     dev: false
 
+  /dotenv@16.0.3:
+    resolution: {integrity: sha512-7GO6HghkA5fYG9TYnNxi14/7K9f5occMlp3zXAuSxn7CKCxt9xbNWG7yF8hTCSUchlfWSe3uLmlPfigevRItzQ==}
+    engines: {node: '>=12'}
+    dev: false
+
   /drbg.js@1.0.1:
     resolution: {integrity: sha512-F4wZ06PvqxYLFEZKkFxTDcns9oFNk34hvmJSEwdzsxVQ8YI5YaxtACgQatkYgv2VI2CFkUd2Y+xosPQnHv809g==}
     engines: {node: '>=0.10'}
@@ -10938,6 +10952,19 @@ packages:
   /reduce-flatten@2.0.0:
     resolution: {integrity: sha512-EJ4UNY/U1t2P/2k6oqotuX2Cc3T6nxJwsM0N0asT7dhrtH1ltUxDn4NalSYmPE2rCkVpcf/X6R0wDwcFpzhd4w==}
     engines: {node: '>=6'}
+    dev: false
+
+  /redux-persist@6.0.0(react@18.2.0)(redux@4.2.1):
+    resolution: {integrity: sha512-71LLMbUq2r02ng2We9S215LtPu3fY0KgaGE0k8WRgl6RkqxtGfl7HUozz1Dftwsb0D/5mZ8dwAaPbtnzfvbEwQ==}
+    peerDependencies:
+      react: '>=16'
+      redux: '>4.0.0'
+    peerDependenciesMeta:
+      react:
+        optional: true
+    dependencies:
+      react: 18.2.0
+      redux: 4.2.1
     dev: false
 
   /redux-thunk@2.4.2(redux@4.2.1):

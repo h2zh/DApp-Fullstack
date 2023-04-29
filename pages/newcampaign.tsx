@@ -1,28 +1,34 @@
 import { Text, Page, Code, Link, Button } from "@vercel/examples-ui";
 import { useState } from "react";
 import { useAppSelector, useAppDispatch } from "../redux/hooks";
+import { addToCampaigns } from "../redux/reducers/campaigns";
 
 function NewCampaign() {
   const [title, setTitle] = useState<string>("");
   const [description, setDescription] = useState<string>("");
   const [targetAmount, setTargetAmount] = useState<number>();
   const [minAmount, setMinAmount] = useState<number>();
-  const [deadline, setDeadline] = useState<number>(); // the type of deadline is string
+  const [deadline, setDeadline] = useState<number>(14); // the type of deadline is string
   const [deposit, setDeposit] = useState<number>();
   const { userObject } = useAppSelector((state: any) => state.users);
+  const dispatch = useAppDispatch();
 
-  const onSubmit = async () => {
-    console.log(deadline);
+  // console.log(userObject);
+
+  const onSubmit = async (event: any) => {
+    event.preventDefault();
+    // console.log(process.env.NEXT_PUBLIC_SERVER_URL);
     if (userObject) {
       const campaignObj = {
-        userAddr: userObject["address"],
+        creatorAccount: userObject["address"],
         title: title,
         description: description,
         targetAmount: targetAmount,
-        deadline: deadline,
-        minAmount: minAmount,
+        daysLimit: deadline,
+        minContribution: minAmount,
       };
-      fetch("/api/createProject", {
+      console.log(campaignObj);
+      fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/api/createProject`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -32,6 +38,21 @@ function NewCampaign() {
         .then((res) => res.json())
         .then((data) => {
           alert(`Campaign successfully created at ${data["projectAddress"]}`);
+          console.log("successful");
+          const daysLimitToMs = deadline * 24 * 60 * 60 * 1000;
+          // Campaign interface is defined in redux
+          dispatch(
+            addToCampaigns({
+              projectAddress: data["projectAddress"],
+              creatorAccount: userObject["address"],
+              title: title,
+              description: description,
+              targetAmount: targetAmount,
+              deadline: Date.now() + daysLimitToMs,
+              minContribution: minAmount,
+              currentAmt: 0,
+            })
+          );
         })
         .catch((err) => console.error(err));
     } else {
@@ -104,7 +125,7 @@ function NewCampaign() {
 
             <div className="flex flex-col items-left space-y-4">
               <span className="block text-md font-medium text-slate-700">
-                Deadline
+                Due in how many days
               </span>
               <input
                 className="form-input border-2 border-slate-500 rounded-md p-3"

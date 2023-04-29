@@ -1,8 +1,11 @@
 import { Text, Page, Code, Link, Button } from "@vercel/examples-ui";
 import { useState } from "react";
 import CCard from "../components/CCard";
+import { useAppSelector, useAppDispatch } from "../redux/hooks";
 
 function CampaignList() {
+  const { campaigns } = useAppSelector((state: any) => state.campaigns);
+
   const testCList = [
     {
       state: "Fundraising",
@@ -46,9 +49,26 @@ function CampaignList() {
     <Page>
       <section className="flex flex-col gap-6">
         <Text variant="h1">Browse All Campaigns</Text>
-        {testCList.map((campaign) => {
-          return <CCard key={campaign.title} {...campaign}></CCard>;
-        })}
+        {campaigns &&
+          campaigns.map((c: any) => {
+            return (
+              <CCard
+                key={c.title}
+                state={"Fundraising"}
+                admin={c.projectAddress}
+                creator={c.creatorAccount}
+                title={c.title}
+                description={c.description}
+                target_amount={c.targetAmount}
+                has_raised_amount={c.currentAmt}
+                deadline={c.deadline}
+                min_contribution={c.minContribution}
+              />
+            );
+          })}
+        {/* {testCList.map((c: any) => {
+          return <CCard key={c.title} {...c} />;
+        })} */}
       </section>
     </Page>
   );

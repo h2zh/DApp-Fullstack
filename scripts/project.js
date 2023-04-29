@@ -36,6 +36,14 @@ async function createProject(
   const projectContract = await hre.ethers.getContractFactory(
     "crowdfundingProject"
   );
+  console.log(
+    creatorAccount,
+    title,
+    description,
+    tagetAmountInWei,
+    daysLimit,
+    minContributionInWei
+  );
   const newProject = await projectContract.deploy(
     creatorAccount,
     title,
@@ -44,6 +52,7 @@ async function createProject(
     daysLimit,
     minContributionInWei
   );
+  console.log(newProject);
   await newProject.deployed();
   // projArr.push(newProject.address)
   // console.log("New project deployed at:", newProject.address);
@@ -189,17 +198,17 @@ async function test() {
   // default min_contribution is calculate by restricted number of donated people(200)
   let min_contribution = targetAmount * 0.005; // ETH
   let createAccount = "0xB0Bc4B6080Bd46f3225B4A684a7Bf8f300dd9ebA";
-
+  console.log("Test func in project.js just executed");
   //////////////////create a new project
-  projectAddr = await createProject(
-    createAccount,
-    "Sample Project",
-    "This is a sample project",
-    targetAmount,
-    daysLimit,
-    min_contribution
-  );
-  console.log("projectAddr:", projectAddr);
+  // projectAddr = await createProject(
+  //   createAccount,
+  //   "Sample Project",
+  //   "This is a sample project",
+  //   targetAmount,
+  //   daysLimit,
+  //   min_contribution
+  // );
+  // console.log("projectAddr:", projectAddr);
 
   //////////////////maintain the project in the array
   // projArr.push(projectAddr)

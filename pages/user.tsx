@@ -9,12 +9,13 @@ function User({ user }: any) {
   // console.log(user);
   const { userObject } = useAppSelector((state: any) => state.users);
   const dispatch = useAppDispatch();
+  console.log(userObject);
 
   // prevent static generated content differs from SSG content
   // https://github.com/vercel/next.js/discussions/35773?sort=top#discussioncomment-4846619
   useEffect(() => {
     dispatch(setUserObject(user));
-  }, []);
+  }, [user]);
 
   const [showDetail, setShowDetail] = useState(false);
   const toggleShowDetail = () => {

@@ -1,9 +1,11 @@
 import { configureStore } from '@reduxjs/toolkit'
 import usersReducer from './reducers/users'
+import campaignsReducer from './reducers/campaigns'
 
 export const store = configureStore({
   reducer: {
     users: usersReducer,
+    campaigns: campaignsReducer,
   },
 })
 

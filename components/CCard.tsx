@@ -18,7 +18,7 @@ const CCard = (props: any) => {
   const date = new Date(props.deadline);
 
   return (
-    <div className="card relative overflow-hidden my-4 space-y-2">
+    <div className="card relative overflow-hidden my-3 space-y-2 ">
       <div
         className={`ribbon ${colorMaker(
           props.state
@@ -34,7 +34,7 @@ const CCard = (props: any) => {
       <p className=" text-sm text-stone-800 tracking-tight">
         {props.description}
       </p>
-      <div className="flex flex-col lg:flex-row">
+      <div className="flex flex-col lg:flex-row lg:space-x-10">
         <div className="inner-card my-6 w-full ">
           <p className="text-md font-bold  text-gray">
             Raised / Targeted Amount

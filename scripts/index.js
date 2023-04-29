@@ -1,30 +1,27 @@
 const express = require("express");
+const cors = require("cors");
+require("dotenv").config(); // to use .env variables
 const bodyParser = require("body-parser");
-const next = require("next");
-
-const dev = process.env.NODE_ENV !== "production";
-const app = next({ dev }); // initializes NextJS instance
-const handle = app.getRequestHandler(); // returns a handler to parse all HTTP requests
-
 const { createProject } = require("./project.js");
 
-app
-  .prepare() // resolves after NextJS successful instantiation.
-  .then(() => {
-    const server = express();
-    server.use(bodyParser.json());
-    server.use(bodyParser.urlencoded({ extended: true }));
+const server = express();
+const port = process.env.SERVER_PORT || 8080;
 
-    server.get("/api/createProject", async (req, res) => {
-      // let creatorAccount = "0x620e4C6680a0C6B09673CBC2A6f1E73EEb34a2f0",
-      //   title = "testtt",
-      //   description = "dasfds",
-      //   targetAmount = 2,
-      //   daysLimit = 5,
-      //   minContribution = 0.01;
-      const requestMethod = req.method;
-      const body = JSON.parse(req.body);
-      console.log(body);
+server.use(cors());
+server.use(bodyParser.json());
+server.post("/api/createProject", async (req, res) => {
+  //   let creatorAccount = "0x620e4C6680a0C6B09673CBC2A6f1E73EEb34a2f0",
+  //     title = "testtt",
+  //     description = "dasfds",
+  //     targetAmount = 2,
+  //     daysLimit = 5,
+  //     minContribution = 0.01;
+  const requestMethod = req.method;
+
+  switch (requestMethod) {
+    case "POST":
+      const body = req.body; // The body-parser middleware should already have parsed the request body as JSON
+
       const {
         creatorAccount,
         title,
@@ -41,21 +38,18 @@ app
         daysLimit,
         minContribution
       );
-      console.log(pAddr);
       return res.status(200).send({ projectAddress: pAddr });
-    });
+    default:
+      res.status(200).json({ message: "createProject API works!" });
+  }
+});
 
-    server.get("*", (req, res) => {
-      // default route
-      return handle(req, res);
-    });
+server.get("/", (req, res) => {
+  // default route
+  return res.status(200).json({ message: "This API works!" });
+});
 
-    server.listen(3000, (err) => {
-      if (err) throw err;
-      console.log("> Ready on http://localhost:3000");
-    });
-  })
-  .catch((ex) => {
-    console.error(ex.stack);
-    process.exit(1);
-  });
+server.listen(port, (err) => {
+  if (err) throw err;
+  console.log(`> Ready on http://localhost:${port}`);
+});
