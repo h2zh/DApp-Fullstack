@@ -36,14 +36,7 @@ async function createProject(
   const projectContract = await hre.ethers.getContractFactory(
     "crowdfundingProject"
   );
-  console.log(
-    creatorAccount,
-    title,
-    description,
-    tagetAmountInWei,
-    daysLimit,
-    minContributionInWei
-  );
+  // console.log(creatorAccount, title);
   const newProject = await projectContract.deploy(
     creatorAccount,
     title,
@@ -52,7 +45,7 @@ async function createProject(
     daysLimit,
     minContributionInWei
   );
-  console.log(newProject);
+  // console.log(newProject);
   await newProject.deployed();
   // projArr.push(newProject.address)
   // console.log("New project deployed at:", newProject.address);
@@ -71,6 +64,7 @@ async function getAllProjects() {
       "New project registered in Projects contract and the details: ",
       details
     );
+    return details;
   }
 }
 

@@ -2,7 +2,16 @@ const express = require("express");
 const cors = require("cors");
 require("dotenv").config(); // to use .env variables
 const bodyParser = require("body-parser");
-const { createProject } = require("./project.js");
+const {
+  createProject,
+  getAllProjects,
+  payDeposit,
+  contribute,
+  getDetail,
+  withdraw,
+  refund,
+  finalize,
+} = require("./project.js");
 
 const server = express();
 const port = process.env.SERVER_PORT || 8080;
@@ -29,6 +38,7 @@ server.post("/api/createProject", async (req, res) => {
         targetAmount,
         daysLimit,
         minContribution,
+        userPrivateKey,
       } = body;
       const pAddr = await createProject(
         creatorAccount,
@@ -38,10 +48,18 @@ server.post("/api/createProject", async (req, res) => {
         daysLimit,
         minContribution
       );
+      console.log(userPrivateKey);
+      // await payDeposit(pAddr, userPrivateKey, targetAmount * 0.01);
       return res.status(200).send({ projectAddress: pAddr });
     default:
       res.status(200).json({ message: "createProject API works!" });
   }
+});
+
+server.get("/api/getAllProjects", async (req, res) => {
+  console.log("getAllProjects triggered");
+  const allProjects = await getAllProjects();
+  res.status(200).send({ allProjects: allProjects, isTrigger: "yes" });
 });
 
 server.get("/", (req, res) => {

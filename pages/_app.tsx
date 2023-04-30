@@ -4,7 +4,8 @@ import { publicProvider } from "wagmi/providers/public";
 import { SessionProvider } from "next-auth/react";
 import { mainnet } from "wagmi/chains";
 import { Provider } from "react-redux";
-import reduxStore from "../redux/store";
+import { persistor, store } from "../redux/store";
+import { PersistGate } from "redux-persist/integration/react";
 import Layout from "../components/Layout";
 
 import "@vercel/examples-ui/globals.css";
@@ -22,14 +23,16 @@ const client = createClient({
 
 function App({ Component, pageProps }: AppProps) {
   return (
-    <Provider store={reduxStore}>
-      <Layout>
-        <WagmiConfig client={client}>
-          <SessionProvider session={pageProps.session} refetchInterval={0}>
-            <Component {...pageProps} />
-          </SessionProvider>
-        </WagmiConfig>
-      </Layout>
+    <Provider store={store}>
+      <PersistGate loading={null} persistor={persistor}>
+        <Layout>
+          <WagmiConfig client={client}>
+            <SessionProvider session={pageProps.session} refetchInterval={0}>
+              <Component {...pageProps} />
+            </SessionProvider>
+          </WagmiConfig>
+        </Layout>
+      </PersistGate>
     </Provider>
   );
 }

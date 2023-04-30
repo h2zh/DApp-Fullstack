@@ -106,6 +106,12 @@ dependencies:
   redux-persist:
     specifier: ^6.0.0
     version: 6.0.0(react@18.2.0)(redux@4.2.1)
+  redux-thunk:
+    specifier: ^2.4.2
+    version: 2.4.2(redux@4.2.1)
+  reduxjs-toolkit-persist:
+    specifier: ^7.2.1
+    version: 7.2.1(@reduxjs/toolkit@1.9.5)
   wagmi:
     specifier: ^0.12.12
     version: 0.12.12(ethers@5.7.2)(immer@9.0.19)(react-dom@18.2.0)(react@18.2.0)(typescript@5.0.4)
@@ -10979,6 +10985,14 @@ packages:
     resolution: {integrity: sha512-LAUYz4lc+Do8/g7aeRa8JkyDErK6ekstQaqWQrNRW//MY1TvCEpMtpTWvlQ+FPbWCx+Xixu/6SHt5N0HR+SB4w==}
     dependencies:
       '@babel/runtime': 7.21.0
+    dev: false
+
+  /reduxjs-toolkit-persist@7.2.1(@reduxjs/toolkit@1.9.5):
+    resolution: {integrity: sha512-1gu9Qid0qXlsM4a2D8eHx/YOwa7I0lgAXqM0KYQoX2RA+KMezkq5wkJKEMLoUkpqVuWYHRdU7auS2/jFVsR0gQ==}
+    peerDependencies:
+      '@reduxjs/toolkit': ^1.6.1
+    dependencies:
+      '@reduxjs/toolkit': 1.9.5(react-redux@8.0.5)(react@18.2.0)
     dev: false
 
   /regenerator-runtime@0.13.11:

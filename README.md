@@ -1,38 +1,26 @@
----
-name: Mint a single NFT with Moralis
-slug: mint-nft-moralis
-description: This example shows how to connect a Metamask wallet with a Next.js app and how to mint NFTs using Moralis, a popular backend service provider for Web3 apps.
-framework: Next.js
-useCase: Documentation
-css: Tailwind
-deployUrl: https://vercel.com/new/clone?repository-url=https://github.com/vercel/examples/tree/main/solutions/mint-nft&project-name=mint-nft&repository-name=mint-nft&env=NEXT_PUBLIC_APP_ID,NEXT_PUBLIC_SERVER_URL,NEXT_PUBLIC_SERVER_DOMAIN
-demoUrl: https://solutions-mint-nft.vercel.app
----
+# Full-stack Decentralized Crowdfunding Platform
 
-# mint-nft example
+By Nian Lu, Howard Zhong, Anyong Mao
 
-This example shows how to mint an NFT using Next.js and [Moralis](https://moralis.io/)
+## Tech Stack
 
-## Demo
+Vyper, Hardhat, Ethers.js, Web3
 
-https://solutions-mint-nft.vercel.app
+Express.js, Next.js, Redux Toolkit, NextAuth, Moralis, Typescript, Tailwind CSS
 
-## How to Use
-
-You can choose from one of the following two methods to use this repository:
-
-### One-Click Deploy
-
-Deploy the example using [Vercel](https://vercel.com?utm_source=github&utm_medium=readme&utm_campaign=vercel-examples):
-
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/vercel/examples/tree/main/solutions/mint-nft&project-name=mint-nft&repository-name=mint-nft&env=NEXT_PUBLIC_APP_ID,NEXT_PUBLIC_SERVER_URL,NEXT_PUBLIC_SERVER_DOMAIN)
-
-### Clone and Deploy
-
-Execute [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app) with [pnpm](https://pnpm.io/installation) to bootstrap the example:
+## How to Clone and Deploy
 
 ```bash
-pnpm create next-app --example https://github.com/vercel/examples/tree/main/solutions/mint-nft
+git clone <the link of this repo>
+```
+
+Create a .env.local file in the project root directory, configure the environmental variables based on .env.example
+
+Get pnpm, change directory to this project and install all dependencies with it
+
+```bash
+brew install pnpm
+pnpm install
 ```
 
 Next, run Next.js in development mode:
@@ -41,4 +29,10 @@ Next, run Next.js in development mode:
 pnpm dev
 ```
 
-Deploy it to the cloud with [Vercel](https://vercel.com/new?utm_source=github&utm_medium=readme&utm_campaign=edge-middleware-eap) ([Documentation](https://nextjs.org/docs/deployment)).
+Open another terminal to run the Express.js backend server:
+
+```bash
+node scripts
+```
+
+Now you can open http://localhost:3000 to use this platform!

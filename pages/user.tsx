@@ -1,15 +1,19 @@
 import { getSession, signOut } from "next-auth/react";
 import { Text, Page, Code, Link, Button } from "@vercel/examples-ui";
 import { useAppSelector, useAppDispatch } from "../redux/hooks";
-import { setUserObject } from "../redux/reducers/users";
+import { setUserObject, setUserPrivateKey } from "../redux/reducers/users";
 import { useEffect, useState } from "react";
 
 // gets a prop from getServerSideProps
 function User({ user }: any) {
-  // console.log(user);
-  const { userObject } = useAppSelector((state: any) => state.users);
+  const { userObject, userPrivateKey } = useAppSelector(
+    (state: any) => state.users
+  );
   const dispatch = useAppDispatch();
-  console.log(userObject);
+  const [pkey, setPkey] = useState("");
+  const [lockPrivateKey, setLockPrivateKey] = useState(false);
+  console.log("pkey", pkey);
+  console.log("userPrivateKey", userPrivateKey);
 
   // prevent static generated content differs from SSG content
   // https://github.com/vercel/next.js/discussions/35773?sort=top#discussioncomment-4846619
@@ -27,6 +31,14 @@ function User({ user }: any) {
     signOut({ callbackUrl: "/signin" });
   };
 
+  const toggleLockPrivateKey = () => {
+    if (lockPrivateKey === false) {
+      console.log("lockPrivateKey === false");
+      dispatch(setUserPrivateKey(pkey));
+    }
+    setLockPrivateKey(!lockPrivateKey);
+  };
+
   return (
     <Page>
       <section className="flex flex-col gap-6">
@@ -39,6 +51,34 @@ function User({ user }: any) {
           </Button>
         </div>
         {showDetail && <pre>{JSON.stringify(user, null, 2)}</pre>}
+        <div className="flex flex-col space-y-1">
+          <Text>Private Key:</Text>
+          <div className="flex flex-row space-x-4 w-full">
+            <input
+              className="form-input border-2 border-slate-500 rounded-md p-1 grow"
+              type="text"
+              placeholder="Paste here"
+              value={pkey}
+              onChange={(e) => setPkey(e.target.value)}
+              disabled={lockPrivateKey}
+            />
+            <Button
+              width={118}
+              variant={lockPrivateKey ? "secondary" : "primary"}
+              onClick={toggleLockPrivateKey}
+            >
+              {lockPrivateKey ? "Modify" : "Submit"}
+            </Button>
+          </div>
+          <Link
+            className="text-sm"
+            rel="noopener noreferrer"
+            target="_blank"
+            href="https://support.metamask.io/hc/en-us/articles/360015289632-How-to-export-an-account-s-private-key#:~:text=On%20the%20account%20page%2C%20click,click%20%E2%80%9CConfirm%E2%80%9D%20to%20proceed."
+          >
+            How to get my account's private key?
+          </Link>
+        </div>
         <Button
           width={100}
           variant="black"

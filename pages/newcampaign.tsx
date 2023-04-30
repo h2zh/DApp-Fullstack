@@ -2,6 +2,7 @@ import { Text, Page, Code, Link, Button } from "@vercel/examples-ui";
 import { useState } from "react";
 import { useAppSelector, useAppDispatch } from "../redux/hooks";
 import { addToCampaigns } from "../redux/reducers/campaigns";
+import { useRouter } from "next/router";
 
 function NewCampaign() {
   const [title, setTitle] = useState<string>("");
@@ -10,13 +11,21 @@ function NewCampaign() {
   const [minAmount, setMinAmount] = useState<number>();
   const [deadline, setDeadline] = useState<number>(14); // the type of deadline is string
   const [deposit, setDeposit] = useState<number>();
-  const { userObject } = useAppSelector((state: any) => state.users);
+  const { userObject, userPrivateKey } = useAppSelector(
+    (state: any) => state.users
+  );
   const dispatch = useAppDispatch();
+  const { push } = useRouter();
 
-  // console.log(userObject);
+  console.log(userPrivateKey);
 
   const onSubmit = async (event: any) => {
     event.preventDefault();
+    if (!userPrivateKey) {
+      alert("Please enter your private key to verify the deposit payment");
+      push("/user");
+      return;
+    }
     // console.log(process.env.NEXT_PUBLIC_SERVER_URL);
     if (userObject) {
       const campaignObj = {
@@ -26,6 +35,7 @@ function NewCampaign() {
         targetAmount: targetAmount,
         daysLimit: deadline,
         minContribution: minAmount,
+        userPrivateKey: userPrivateKey,
       };
       console.log(campaignObj);
       fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/api/createProject`, {
@@ -59,6 +69,7 @@ function NewCampaign() {
       alert("You have to connect to your wallet first");
     }
   };
+
   return (
     <Page>
       <section className="flex flex-col gap-6">
