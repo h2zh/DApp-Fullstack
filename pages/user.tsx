@@ -56,7 +56,7 @@ function User({ user }: any) {
           <div className="flex flex-row space-x-4 w-full">
             <input
               className="form-input border-2 border-slate-500 rounded-md p-1 grow"
-              type="text"
+              type={lockPrivateKey ? "password" : "text"}
               placeholder="Paste here"
               value={pkey}
               onChange={(e) => setPkey(e.target.value)}

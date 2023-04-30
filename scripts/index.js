@@ -50,7 +50,7 @@ server.post("/api/createProject", async (req, res) => {
         minContribution
       );
       console.log(userPrivateKey);
-      // await payDeposit(pAddr, userPrivateKey, targetAmount * 0.01);
+      await payDeposit(pAddr, userPrivateKey, targetAmount * 0.01);
       return res.status(200).send({ projectAddress: pAddr });
     default:
       res.status(200).json({ message: "createProject API works!" });
@@ -64,9 +64,10 @@ server.get("/api/getAllProjects", async (req, res) => {
 });
 
 server.post("/api/contribute", async (req, res) => {
-  console.log("getAllProjects triggered");
-  const allProjects = await getAllProjects();
-  res.status(200).send({ allProjects: allProjects, isTrigger: "yes" });
+  console.log("contribute triggered");
+  const { projectAddr, creatorPrivateKey, depositAmount } = req.body;
+  await contribute(projectAddr, creatorPrivateKey, depositAmount);
+  res.status(200).send();
 });
 
 server.get("/", (req, res) => {

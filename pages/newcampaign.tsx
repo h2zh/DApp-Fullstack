@@ -26,6 +26,10 @@ function NewCampaign() {
       push("/user");
       return;
     }
+    if (!title || !description || !targetAmount) {
+      alert("Please enter all fields");
+      return;
+    }
     // console.log(process.env.NEXT_PUBLIC_SERVER_URL);
     if (userObject) {
       const campaignObj = {
