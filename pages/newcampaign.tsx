@@ -93,6 +93,7 @@ function NewCampaign() {
           </span>
           <textarea
             rows={4}
+            maxLength={450}
             className="form-input border-2 border-slate-500 rounded-md p-3"
             placeholder="Enter a description for this campaign"
             value={description}

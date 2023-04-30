@@ -40,6 +40,7 @@ server.post("/api/createProject", async (req, res) => {
         minContribution,
         userPrivateKey,
       } = body;
+      console.log(body);
       const pAddr = await createProject(
         creatorAccount,
         title,
@@ -57,6 +58,12 @@ server.post("/api/createProject", async (req, res) => {
 });
 
 server.get("/api/getAllProjects", async (req, res) => {
+  console.log("getAllProjects triggered");
+  const allProjects = await getAllProjects();
+  res.status(200).send({ allProjects: allProjects, isTrigger: "yes" });
+});
+
+server.post("/api/contribute", async (req, res) => {
   console.log("getAllProjects triggered");
   const allProjects = await getAllProjects();
   res.status(200).send({ allProjects: allProjects, isTrigger: "yes" });

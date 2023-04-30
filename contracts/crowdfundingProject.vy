@@ -55,7 +55,7 @@ platform_percentage: uint256
 # min_contribution: minimum contribution per donation(d)
 @external
 @payable
-def __init__(_creator: address, _title: String[100], _description: String[32], 
+def __init__(_creator: address, _title: String[100], _description: String[500], 
     _target_amount: uint256, _days_limit: uint256, _min_contribution: uint256):
     self.admin = msg.sender
     self.creator = _creator
