@@ -4,7 +4,7 @@ import React, { useState } from "react";
 import { contribute } from "../scripts/bfunctions";
 import { useAppSelector, useAppDispatch } from "../redux/hooks";
 import { modifyCampaigns } from "../redux/reducers/campaigns";
-import { withdraw, refund, finalize } from "../scripts/bfunctions";
+import { withdraw, refund, finalize, getDetail } from "../scripts/bfunctions";
 
 enum CampaignState {
   Fundraising,
@@ -64,6 +64,28 @@ const CCard = (props: any) => {
     dispatch(modifyCampaigns(newCampaigns));
   };
 
+  const updateAmt = async (projectAddress: any) => {
+    const newProjectDetails = await getDetail(projectAddress);
+    console.log(newProjectDetails);
+  };
+
+  const handleContribute = async () => {
+    if (!amount || amount < props.min_contribution) {
+      alert("Please enter a valid amount");
+      return;
+    }
+    if (Date.now() > props.deadline) {
+      alert(
+        "This campaign has been expired and no longer receive contribution"
+      );
+      return;
+    }
+    const isContributeSucceed = await contribute(props.projectAddress, amount);
+    addAmt(amount, props.deadline);
+    console.log(isContributeSucceed);
+    setAmount(0);
+  };
+
   return (
     <div className="card relative overflow-hidden my-3 space-y-2 ">
       <div
@@ -115,28 +137,7 @@ const CCard = (props: any) => {
                   className="form-input border-2 border-slate-500 rounded-md p-1 w-30"
                 />
 
-                <Button
-                  type="submit"
-                  onClick={async () => {
-                    if (!amount || amount < props.min_contribution) {
-                      alert("Please enter a valid amount");
-                      return;
-                    }
-                    if (Date.now() > props.deadline) {
-                      alert(
-                        "This campaign has been expired and no longer receive contribution"
-                      );
-                      return;
-                    }
-                    const isContributeSucceed = await contribute(
-                      props.projectAddress,
-                      amount
-                    );
-                    addAmt(amount, props.deadline);
-                    console.log(isContributeSucceed);
-                    setAmount(0);
-                  }}
-                >
+                <Button type="submit" onClick={updateAmt}>
                   Contribute
                 </Button>
               </div>
