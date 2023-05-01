@@ -131,7 +131,7 @@ export async function payDeposit(projectAddr:string, depositAmount:number) {
   
     try {
       const gasLimit = 100000;
-      await projectContract.withdraw({ gasLimit: gasLimit });
+      await connectedContract.withdraw({ gasLimit: gasLimit });
       console.log("Withdraw successful");
     } catch (error) {
       console.error("Error:", error);
@@ -144,7 +144,7 @@ export async function payDeposit(projectAddr:string, depositAmount:number) {
 
     try {
       const gasLimit = 200000;
-      await projectContract.refund({ gasLimit: gasLimit });
+      await connectedContract.refund({ gasLimit: gasLimit });
       console.log("Refund successful");
     } catch (error) {
       console.error("Error:", error);
@@ -153,13 +153,24 @@ export async function payDeposit(projectAddr:string, depositAmount:number) {
   
  export async function finalize(projectAddr:any) {
     const projectContract = new ethers.Contract(projectAddr, contractABI, adminProvider);
+<<<<<<< HEAD
     const connectedContract = projectContract.connect(adminSigner);
   
+=======
+  const connectedContract = projectContract.connect(adminSigner);
+
+>>>>>>> a269a41d9da4a319c8da396a09a1975f21e49e8c
     try {
       const gasLimit = 100000;
-      await projectContract.finalize({ gasLimit: gasLimit });
+      await connectedContract.finalize({ gasLimit: gasLimit });
       console.log("Finalize successful");
     } catch (error) {
       console.error("Error:", error);
     }
+  }
+
+export async function getDetail(projectAddr:any) {
+    const projectContract = new ethers.Contract(projectAddr, contractABI, adminProvider);
+    const details = await projectContract.getDetail();
+    return details;
   }
