@@ -6,6 +6,7 @@ const contractBytecode = contractJSON.bytecode;
 const adminProvider = new ethers.providers.JsonRpcProvider(`https://eth-goerli.alchemyapi.io/v2/pRS_ZCMP9xjYC_qNr6nhK0WThqiJpsE9`);
 const adminPrivateKey = "7740f7ae4a285d3da1a79c1512a05f3f580faf9b347b31410bce4903000626d1";
 const adminSigner = new ethers.Wallet(adminPrivateKey, adminProvider);
+const adminAccount = "0xB0Bc4B6080Bd46f3225B4A684a7Bf8f300dd9ebA"
 
  // creatorAccount is the account of
 // targetAmount, minContribution in Ether
@@ -140,7 +141,7 @@ export async function payDeposit(projectAddr:string, depositAmount:number) {
   
     try {
       const gasLimit = 100000;
-      await connectedContract.withdraw({ gasLimit: gasLimit });
+      await connectedContract.withdraw(adminAccount, { gasLimit: gasLimit });
       console.log("Withdraw successful");
     } catch (error) {
       console.error("Error:", error);
@@ -174,20 +175,8 @@ export async function payDeposit(projectAddr:string, depositAmount:number) {
     
     try {
       const gasLimit = 100000;
-      await connectedContract.finalize({ gasLimit: gasLimit });
-      console.log("Finalize successful");
-    } catch (error) {
-      console.error("Error:", error);
-    }
-  }
-  
- export async function finalize(projectAddr:any) {
-    const projectContract = new ethers.Contract(projectAddr, contractABI, adminProvider);
-  const connectedContract = projectContract.connect(adminSigner);
-
-    try {
-      const gasLimit = 100000;
-      await connectedContract.finalize({ gasLimit: gasLimit });
+      const tx = await connectedContract.finalize({ gasLimit: gasLimit });
+      await tx.wait()
       console.log("Finalize successful");
     } catch (error) {
       console.error("Error:", error);

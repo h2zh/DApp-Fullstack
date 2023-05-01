@@ -30,7 +30,6 @@ struct Contributor:
     contributor: address
     amount: uint256
 
-admin: address
 creator: address
 title: String[100]
 description: String[500]
@@ -57,7 +56,6 @@ platform_percentage: uint256
 @payable
 def __init__(_creator: address, _title: String[100], _description: String[500], 
     _target_amount: uint256, _deadline_unix: uint256, _min_contribution: uint256):
-    self.admin = msg.sender
     self.creator = _creator
     self.title = _title
     self.description = _description
@@ -114,23 +112,21 @@ def refund():
 # destroy the contract from the chain & deduct platform fees
 @external
 def finalize():
-    if block.timestamp < self.deadline:
-        raise "this project hasn't expired"
     # destroy contract and send remaining Ether(0) balance to creator
-    # pay platform fee
-    send(msg.sender, (self.raised_amount * self.platform_percentage) / 100)
-
     # destroy the contract and return deposit except platform cost
     selfdestruct(self.creator)
 
 # withdraw moneny if has raised enough money
 @external
-def withdraw():
+def withdraw(adminAddr: address):
     if self.raised_amount < self.target_amount and block.timestamp < self.deadline:
         raise "this project hasn't raised enough money or hasn't expired"
     assert self.creator == msg.sender, "refund function can only be called by creator"
+    # pay platform fee
+    platformFee : uint256 = (self.raised_amount * self.platform_percentage) / 100
+    send(adminAddr, platformFee)
     # transfer raised amount to the creator account
-    send(self.creator, self.raised_amount)
+    send(msg.sender, self.raised_amount - platformFee)
 
     log Withdraw(self.creator, self.raised_amount)
 
