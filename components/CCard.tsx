@@ -54,19 +54,22 @@ const CCard = (props: any) => {
   const date = new Date(props.deadline * 1000); // convert deadline in s to ms
   let state = getState(date, props.has_raised_amount, props.target_amount);
 
-  const addAmt = (amt: number, id: any) => {
+  const addAmt = (amt: number, key: any) => {
     const newCampaigns = campaigns.map((c: any) => {
-      if (c.id === id) {
-        return { ...c, currentAmt: amt };
+      if (c.deadline === key) {
+        const newAmt = amt + c.has_raised_amount;
+        return { ...c, has_raised_amount: newAmt };
       }
       return c;
     });
     dispatch(modifyCampaigns(newCampaigns));
   };
 
+  // backup func: how to call: async () => updateAmt(props.projectAddress)
   const updateAmt = async (projectAddress: any) => {
     const newProjectDetails = await getDetail(projectAddress);
     console.log(newProjectDetails);
+    // return parseInt(newProjectDetails.raised_amount._hex);
   };
 
   const handleContribute = async () => {
@@ -74,13 +77,16 @@ const CCard = (props: any) => {
       alert("Please enter a valid amount");
       return;
     }
-    if (Date.now() > props.deadline) {
+    if (Date.now() > props.deadline * 1000) {
       alert(
         "This campaign has been expired and no longer receive contribution"
       );
       return;
     }
+    // check curAmt in console
+    await updateAmt(props.projectAddress);
     const isContributeSucceed = await contribute(props.projectAddress, amount);
+
     addAmt(amount, props.deadline);
     console.log(isContributeSucceed);
     setAmount(0);
@@ -137,7 +143,7 @@ const CCard = (props: any) => {
                   className="form-input border-2 border-slate-500 rounded-md p-1 w-30"
                 />
 
-                <Button type="submit" onClick={updateAmt}>
+                <Button type="submit" onClick={handleContribute}>
                   Contribute
                 </Button>
               </div>

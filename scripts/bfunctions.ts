@@ -4,7 +4,7 @@ import contractJSON from "./crowdfundingProject.json";
 const contractABI = contractJSON.abi;
 const contractBytecode = contractJSON.bytecode;
 const adminProvider = new ethers.providers.JsonRpcProvider(`https://eth-goerli.alchemyapi.io/v2/pRS_ZCMP9xjYC_qNr6nhK0WThqiJpsE9`);
-const adminPrivateKey = "f3790613f390092fa017870db688bab815ecedf101ba05164227be9947eea4ed";
+const adminPrivateKey = "7740f7ae4a285d3da1a79c1512a05f3f580faf9b347b31410bce4903000626d1";
 const adminSigner = new ethers.Wallet(adminPrivateKey, adminProvider);
 
  // creatorAccount is the account of

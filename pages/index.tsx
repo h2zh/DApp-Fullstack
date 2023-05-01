@@ -9,9 +9,9 @@ function Home() {
   const dispatch = useAppDispatch();
 
   const userAddress = userObject["address"];
-  campaigns.forEach((c: any) => {
-    console.log(c);
-  });
+  // campaigns.forEach((c: any) => {
+  //   console.log(c);
+  // });
 
   return (
     <Page>
