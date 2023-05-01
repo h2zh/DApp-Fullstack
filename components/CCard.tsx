@@ -14,12 +14,12 @@ enum CampaignState {
 
 const getState = (ddl: any, curAmt: any, targetAmt: any) => {
   // console.log(Date.now(), ddl);
-  if (Date.now() < ddl) {
-    return CampaignState.Fundraising;
-  } else if (curAmt < targetAmt) {
-    return CampaignState.Expired;
-  } else {
+  if (curAmt >= targetAmt) {
     return CampaignState.Successful;
+  } else if (Date.now() < ddl) {
+    return CampaignState.Fundraising;
+  } else {
+    return CampaignState.Expired;
   }
 };
 
@@ -54,15 +54,27 @@ const CCard = (props: any) => {
   const date = new Date(props.deadline * 1000); // convert deadline in s to ms
   let state = getState(date, props.has_raised_amount, props.target_amount);
 
+  // console.log(typeof amount, amount);
+
   const addAmt = (amt: number, key: any) => {
-    const newCampaigns = campaigns.map((c: any) => {
+    const updatedCampaigns = campaigns.map((c: any) => {
       if (c.deadline === key) {
-        const newAmt = amt + c.has_raised_amount;
-        return { ...c, has_raised_amount: newAmt };
+        // console.log("c: ", c);
+        // console.log(
+        //   "title: ",
+        //   c.title,
+        //   "amts: ",
+        //   amt,
+        //   c.currentAmt
+        // );
+        const newAmt = amt + c.currentAmt; // use the property name in the Campaign interface, instead of the props in the parent component
+        // console.log(newAmt);
+        return { ...c, currentAmt: newAmt };
+      } else {
+        return c;
       }
-      return c;
     });
-    dispatch(modifyCampaigns(newCampaigns));
+    dispatch(modifyCampaigns(updatedCampaigns));
   };
 
   // backup func: how to call: async () => updateAmt(props.projectAddress)
@@ -83,12 +95,14 @@ const CCard = (props: any) => {
       );
       return;
     }
-    // check curAmt in console
-    await updateAmt(props.projectAddress);
+    // check curAmt before contribute in console
+    // await updateAmt(props.projectAddress);
     const isContributeSucceed = await contribute(props.projectAddress, amount);
+    // console.log(isContributeSucceed);
+    // check curAmt after contribute in console
+    // await updateAmt(props.projectAddress);
 
     addAmt(amount, props.deadline);
-    console.log(isContributeSucceed);
     setAmount(0);
   };
 
