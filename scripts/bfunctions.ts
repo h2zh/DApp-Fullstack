@@ -35,15 +35,27 @@ export async function createProject(
     daysLimit,
     minContributionInWei
   );
-  const gasLimit = 500000;
+  //Estimate gas required for deployment
+  const deployTransaction = projectContract.getDeployTransaction(
+    creatorAccount,
+    title,
+    description,
+    tagetAmountInWei,
+    daysLimit,
+    minContributionInWei);
+  const gasEstimate = await adminSigner.estimateGas(deployTransaction);
+
+  // Set your custom gas limit
+  const gasLimit = gasEstimate.mul(ethers.BigNumber.from(2));
+
   const newProject = await projectContract.deploy(
     creatorAccount,
     title,
     description,
     tagetAmountInWei,
     daysLimit,
-    minContributionInWei
-    // { gasLimit }
+    minContributionInWei,
+    { gasLimit }
   );
   console.log("newProject");
   await newProject.deployed();
