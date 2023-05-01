@@ -56,7 +56,7 @@ platform_percentage: uint256
 @external
 @payable
 def __init__(_creator: address, _title: String[100], _description: String[500], 
-    _target_amount: uint256, _hours_limit: uint256, _min_contribution: uint256):
+    _target_amount: uint256, _deadline_unix: uint256, _min_contribution: uint256):
     self.admin = msg.sender
     self.creator = _creator
     self.title = _title
@@ -64,7 +64,7 @@ def __init__(_creator: address, _title: String[100], _description: String[500],
     self.target_amount = _target_amount
 
     seconds_in_day: uint256 = 86400
-    self.deadline =  block.timestamp + _hours_limit * 3600
+    self.deadline =  _deadline_unix
     self.contributors_num = 0
     self.raised_amount = 0
     self.min_contribution = _min_contribution

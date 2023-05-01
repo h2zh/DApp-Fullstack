@@ -29,16 +29,15 @@ function NewCampaign() {
     const userAddress = userObject["address"];
     console.log("deadline:", deadline);
     // block.timestamp is a uint256 value in seconds
-    // const deadlineUnix = Date.now() + deadline * 60 * 60 * 1000; // Unix timestamp (s)
-    // console.log("deadlineUnix:", deadlineUnix);
-    // console.log(typeof deadlineUnix, deadlineUnix);
+    const deadlineUnix = Math.floor(Date.now() / 1000) + deadline * 60 * 60; // Unix timestamp (s)
+    console.log(typeof deadlineUnix, deadlineUnix);
     if (userAddress && deposit) {
       const campaignAddr = await createProject(
         userAddress,
         title,
         description,
         targetAmount,
-        deadline,
+        deadlineUnix,
         minAmount
       );
       // console.log(campaignAddr);
@@ -49,7 +48,7 @@ function NewCampaign() {
           title: title,
           description: description,
           targetAmount: targetAmount,
-          deadline: Date.now() + deadline * 60 * 60,
+          deadline: deadlineUnix,
           minContribution: minAmount,
           currentAmt: 0,
         })

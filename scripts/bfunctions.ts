@@ -4,7 +4,7 @@ import contractJSON from "./crowdfundingProject.json";
 const contractABI = contractJSON.abi;
 const contractBytecode = contractJSON.bytecode;
 const adminProvider = new ethers.providers.JsonRpcProvider(`https://eth-goerli.alchemyapi.io/v2/pRS_ZCMP9xjYC_qNr6nhK0WThqiJpsE9`);
-const adminPrivateKey = "7740f7ae4a285d3da1a79c1512a05f3f580faf9b347b31410bce4903000626d1";
+const adminPrivateKey = "f3790613f390092fa017870db688bab815ecedf101ba05164227be9947eea4ed";
 const adminSigner = new ethers.Wallet(adminPrivateKey, adminProvider);
 
  // creatorAccount is the account of
@@ -35,27 +35,15 @@ export async function createProject(
     daysLimit,
     minContributionInWei
   );
-  //Estimate gas required for deployment
-  const deployTransaction = projectContract.getDeployTransaction(
-    creatorAccount,
-    title,
-    description,
-    tagetAmountInWei,
-    daysLimit,
-    minContributionInWei);
-  const gasEstimate = await adminSigner.estimateGas(deployTransaction);
-
-  // Set your custom gas limit
-  const gasLimit = gasEstimate.mul(ethers.BigNumber.from(2));
-
+  const gasLimit = 500000;
   const newProject = await projectContract.deploy(
     creatorAccount,
     title,
     description,
     tagetAmountInWei,
     daysLimit,
-    minContributionInWei,
-    { gasLimit }
+    minContributionInWei
+    // { gasLimit }
   );
   console.log("newProject");
   await newProject.deployed();
@@ -153,13 +141,8 @@ export async function payDeposit(projectAddr:string, depositAmount:number) {
   
  export async function finalize(projectAddr:any) {
     const projectContract = new ethers.Contract(projectAddr, contractABI, adminProvider);
-<<<<<<< HEAD
-    const connectedContract = projectContract.connect(adminSigner);
-  
-=======
   const connectedContract = projectContract.connect(adminSigner);
 
->>>>>>> a269a41d9da4a319c8da396a09a1975f21e49e8c
     try {
       const gasLimit = 100000;
       await connectedContract.finalize({ gasLimit: gasLimit });
