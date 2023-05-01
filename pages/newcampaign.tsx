@@ -27,17 +27,18 @@ function NewCampaign() {
     }
 
     const userAddress = userObject["address"];
+    const deadlineUnix = Date.now() + deadline * 24 * 60 * 60;
     if (userAddress && deposit) {
       const campaignAddr = await createProject(
         userAddress,
         title,
         description,
         targetAmount,
-        deadline,
+        deadlineUnix,
         minAmount
       );
       console.log(campaignAddr);
-      const daysLimitToMs = deadline * 24 * 60 * 60 * 1000;
+
       dispatch(
         addToCampaigns({
           projectAddress: campaignAddr,
@@ -45,7 +46,7 @@ function NewCampaign() {
           title: title,
           description: description,
           targetAmount: targetAmount,
-          deadline: Date.now() + daysLimitToMs,
+          deadline: deadlineUnix,
           minContribution: minAmount,
           currentAmt: 0,
         })
