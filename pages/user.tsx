@@ -1,7 +1,11 @@
 import { getSession, signOut } from "next-auth/react";
 import { Text, Page, Code, Link, Button } from "@vercel/examples-ui";
 import { useAppSelector, useAppDispatch } from "../redux/hooks";
-import { setUserObject, setUserPrivateKey } from "../redux/reducers/users";
+import {
+  setUserObject,
+  setUserPrivateKey,
+  setUserProvider,
+} from "../redux/reducers/users";
 import { useEffect, useState } from "react";
 import { useEvmNativeBalance } from "@moralisweb3/next";
 import Moralis from "moralis-v1";
@@ -12,7 +16,7 @@ import { ethers } from "hardhat";
 
 // gets a prop from getServerSideProps
 function User({ user }: any) {
-  const { userObject, userPrivateKey } = useAppSelector(
+  const { userObject, userPrivateKey, userProvider } = useAppSelector(
     (state: any) => state.users
   );
   const dispatch = useAppDispatch();
@@ -20,7 +24,6 @@ function User({ user }: any) {
   const [pkey, setPkey] = useState("");
   const [lockPrivateKey, setLockPrivateKey] = useState(false);
   // console.log("pkey", pkey);
-  // console.log("userPrivateKey", userPrivateKey);
 
   const { isWeb3Enabled, isAuthenticated } = useMoralis();
 
@@ -29,8 +32,10 @@ function User({ user }: any) {
     // const myContract = new ethers.Contract(contractAddress, abi, provider);
     let web3 = await Moralis.enableWeb3();
     // const myContract = new ethers.Contract(contractAddress, abi, web3);
+    dispatch(setUserProvider(web3));
     console.log("This is a Web3Provider object:", web3);
   };
+  console.log("userProvider", userProvider);
 
   useEffect(() => {
     if (isWeb3Enabled) {
@@ -74,7 +79,7 @@ function User({ user }: any) {
           </Button>
         </div>
         {showDetail && <pre>{JSON.stringify(user, null, 2)}</pre>}
-        <div className="flex flex-col space-y-1">
+        {/* <div className="flex flex-col space-y-1">
           <Text>Private Key:</Text>
           <div className="flex flex-row space-x-4 w-full">
             <input
@@ -101,7 +106,7 @@ function User({ user }: any) {
           >
             How to get my account's private key?
           </Link>
-        </div>
+        </div> */}
         <Button width={100} variant="black" onClick={handleSignOut}>
           Sign out
         </Button>

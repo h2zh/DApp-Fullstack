@@ -23,6 +23,12 @@ brew install pnpm
 pnpm install
 ```
 
+First compile the blockchain code via Hardhat 
+
+```bash
+npx hardhat compile
+```
+
 Next, run Next.js in development mode:
 
 ```bash

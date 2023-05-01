@@ -8,7 +8,7 @@ import thunk from 'redux-thunk';
 
 const persistConfig = {
   key: 'root',
-  storage: storageSession,
+  storage //: storageSession,
 }
 
 const rootReducer = combineReducers({ 

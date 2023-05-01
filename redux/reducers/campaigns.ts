@@ -18,8 +18,11 @@ const campaignsSlice = createSlice({
         addToCampaigns: (state, action: PayloadAction<Campaign>) => {
             state.campaigns.push(action.payload)
         },
+        modifyCampaigns: (state, action) => {
+            state.campaigns = action.payload
+        },
     }
 });
 
-export const {addToCampaigns} = campaignsSlice.actions;
+export const {addToCampaigns, modifyCampaigns} = campaignsSlice.actions;
 export default campaignsSlice.reducer;

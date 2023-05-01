@@ -1,37 +1,90 @@
 import { Button } from "@vercel/examples-ui";
 import Link from "next/link";
 import React, { useState } from "react";
+import { contribute } from "../scripts/bfunctions";
+import { useAppSelector, useAppDispatch } from "../redux/hooks";
+import { modifyCampaigns } from "../redux/reducers/campaigns";
+import { withdraw, refund, finalize } from "../scripts/bfunctions";
+
+enum CampaignState {
+  Fundraising,
+  Expired,
+  Successful,
+}
+
+const getState = (ddl: any, curAmt: any, targetAmt: any) => {
+  // console.log(Date.now(), ddl);
+  if (Date.now() < ddl) {
+    return CampaignState.Fundraising;
+  } else if (curAmt < targetAmt) {
+    return CampaignState.Expired;
+  } else {
+    return CampaignState.Successful;
+  }
+};
 
 const colorMaker = (state: any) => {
-  if (state === "Fundraising") {
+  if (state === CampaignState.Fundraising) {
     return "bg-cyan-500";
-  } else if (state === "Expired") {
+  } else if (state === CampaignState.Expired) {
     return "bg-red-500";
-  } else {
-    // state === Successful
+  } else if (state === CampaignState.Successful) {
     return "bg-emerald-500";
   }
 };
 
+const stateToString = (state: any) => {
+  if (state === CampaignState.Fundraising) {
+    return "Fundraising";
+  } else if (state === CampaignState.Expired) {
+    return "Expired";
+  } else if (state === CampaignState.Successful) {
+    return "Successful";
+  }
+};
+
 const CCard = (props: any) => {
+  const { campaigns } = useAppSelector((state: any) => state.campaigns);
+  const { userObject } = useAppSelector((state: any) => state.users);
+  const userAddress = userObject["address"];
+  const isOwner = props.creator === userAddress;
+
+  const dispatch = useAppDispatch();
   const [amount, setAmount] = useState<number>();
   const date = new Date(props.deadline);
+  let state = getState(
+    props.deadline,
+    props.has_raised_amount,
+    props.target_amount
+  );
+
+  const addAmt = (amt: number, id: any) => {
+    const newCampaigns = campaigns.map((c: any) => {
+      if (c.id === id) {
+        return { ...c, currentAmt: amt };
+      }
+      return c;
+    });
+    dispatch(modifyCampaigns(newCampaigns));
+  };
 
   return (
     <div className="card relative overflow-hidden my-3 space-y-2 ">
       <div
         className={`ribbon ${colorMaker(
-          props.state
+          state
         )}  p-1 px-3 flex flex-auto justify-between text-white font-semibold`}
       >
-        <div>{props.state} </div>
+        <div>{stateToString(state)} </div>
 
         <div>{(props.has_raised_amount / props.target_amount) * 100}%</div>
       </div>
       <h1 className=" text-xl text-gray font-semibold hover:text-sky-500 hover:cursor-pointer">
         {props.title}
       </h1>
-      <p>{props.admin}</p>
+      <p className=" text-sm text-stone-800 tracking-tight">
+        Campaign Contract Address: {props.projectAddress}
+      </p>
       <p className=" text-sm text-stone-800 tracking-tight">
         {props.description}
       </p>
@@ -51,7 +104,7 @@ const CCard = (props: any) => {
           </p>
         </div>
         <div className="inner-card my-6 w-full">
-          {props.state !== "Successful" ? (
+          {state === CampaignState.Fundraising ? (
             <>
               <label className="text-md font-bold  text-gray">
                 Contribution amount
@@ -68,13 +121,26 @@ const CCard = (props: any) => {
 
                 <Button
                   type="submit"
-                  onClick={
-                    () => console.log("TODO")
-                    // contributeAmount(props.creator, props.min_contribution)
-                  }
-                  //   disabled={btnLoader === props.creator}
+                  onClick={async () => {
+                    if (!amount || amount < props.min_contribution) {
+                      alert("Please enter a valid amount");
+                      return;
+                    }
+                    if (Date.now() > props.deadline) {
+                      alert(
+                        "This campaign has been expired and no longer receive contribution"
+                      );
+                      return;
+                    }
+                    const isContributeSucceed = await contribute(
+                      props.projectAddress,
+                      amount
+                    );
+                    addAmt(amount, props.deadline);
+                    console.log(isContributeSucceed);
+                    setAmount(0);
+                  }}
                 >
-                  {/* {btnLoader === props.address ? "Loading..." : "Contribute"} */}
                   Contribute
                 </Button>
               </div>
@@ -84,36 +150,28 @@ const CCard = (props: any) => {
             </>
           ) : (
             <>
-              <p className="text-md font-bold  text-gray">Contract balance</p>
-              <p className="text-sm font-bold  text-gray-600 ">
-                {props.contractBalance} ETH{" "}
-              </p>
-
-              {/* {props.creator === account ? (
-                <>
-                  <label className="text-sm text-gray-700 font-semibold">
-                    Withdraw request :
-                  </label>
-                  <div className="flex flex-row">
-                    <input
-                      type="number"
-                      placeholder="Type here"
-                      value={amount}
-                      onChange={(e) => setAmount(e.target.value)}
-                      disabled={btnLoader === props.address}
-                      className="input rounded-l-md"
-                    />
-                    <button
-                      className="button"
-                      onClick={() => requestForWithdraw(props.address)}
-                    >
-                      {btnLoader === props.address ? "Loading..." : "Withdraw"}
-                    </button>
-                  </div>
-                </>
-              ) : (
-                ""
-              )} */}
+              <div className="flex flex-row space-x-4">
+                <Button
+                  type="submit"
+                  disabled={!isOwner}
+                  onClick={async () => {
+                    await withdraw(props.projectAddress);
+                    await finalize(props.projectAddress);
+                  }}
+                >
+                  Withdraw
+                </Button>
+                <Button
+                  type="submit"
+                  disabled={!isOwner}
+                  onClick={async () => {
+                    await refund(props.projectAddress);
+                    await finalize(props.projectAddress);
+                  }}
+                >
+                  Refund
+                </Button>
+              </div>
             </>
           )}
         </div>

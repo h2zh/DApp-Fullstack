@@ -11,9 +11,6 @@ const signer = provider.getSigner();
 // maintain all projects
 const projArr = [];
 
-function sampleFunc() {
-  console.log("successfully call sampleFunc\n");
-}
 // creatorAccount is the account of
 // targetAmount, minContribution in Ether
 // minContribution is to restrict the number of transaction(reduce gas)
