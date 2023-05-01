@@ -2,9 +2,9 @@ import { Button } from "@vercel/examples-ui";
 import Link from "next/link";
 import React, { useState } from "react";
 import { useAppSelector, useAppDispatch } from "../redux/hooks";
-import { modifyCampaigns, removeCampaigns } from "../redux/reducers/campaigns";
+import { modifyCampaigns } from "../redux/reducers/campaigns";
 import { contribute, withdraw, refund, getDetail } from "../scripts/bfunctions";
-
+import LoadingCircle from "./LoadingCircle";
 enum CampaignState {
   Fundraising,
   Expired,
@@ -47,7 +47,9 @@ const CCard = (props: any) => {
   const { userObject } = useAppSelector((state: any) => state.users);
   const userAddress = userObject["address"];
   const isOwner = props.creator === userAddress;
-
+  const [contributeLoading, setContributeLoading] = useState(false);
+  const [withdrawLoading, setwWithdrawLoading] = useState(false);
+  const [refundLoading, setRefundLoading] = useState(false);
   const dispatch = useAppDispatch();
   const [amount, setAmount] = useState<number>();
   const date = new Date(props.deadline * 1000); // convert deadline in s to ms
@@ -58,16 +60,7 @@ const CCard = (props: any) => {
   const addAmt = (amt: number, key: any) => {
     const updatedCampaigns = campaigns.map((c: any) => {
       if (c.deadline === key) {
-        // console.log("c: ", c);
-        // console.log(
-        //   "title: ",
-        //   c.title,
-        //   "amts: ",
-        //   amt,
-        //   c.currentAmt
-        // );
         const newAmt = amt + c.currentAmt; // use the property name in the Campaign interface, instead of the props in the parent component
-        // console.log(newAmt);
         return { ...c, currentAmt: newAmt };
       } else {
         return c;
@@ -96,7 +89,9 @@ const CCard = (props: any) => {
     }
     // check curAmt before contribute in console
     // await updateAmt(props.projectAddress);
+    setContributeLoading(true);
     const isContributeSucceed = await contribute(props.projectAddress, amount);
+    setContributeLoading(false);
     // console.log(isContributeSucceed);
     // check curAmt after contribute in console
     // await updateAmt(props.projectAddress);
@@ -107,10 +102,7 @@ const CCard = (props: any) => {
   };
 
   function removeCampaignWithId(key: any) {
-    // console.log(objWithIdIndex);
-
     const updatedCampaigns = campaigns.filter((c: any) => c.deadline !== key);
-    console.log(updatedCampaigns);
     dispatch(modifyCampaigns(updatedCampaigns));
     console.log("Removal succeeded");
     return true;
@@ -163,11 +155,11 @@ const CCard = (props: any) => {
                   placeholder="Enter here"
                   value={amount}
                   onChange={(e) => setAmount(parseFloat(e.target.value))}
-                  //   disabled={btnLoader === props.creator}
                   className="form-input border-2 border-slate-500 rounded-md p-1 w-30"
                 />
 
                 <Button type="submit" onClick={handleContribute}>
+                  {contributeLoading ? <LoadingCircle /> : null}
                   Contribute
                 </Button>
               </div>
@@ -183,22 +175,28 @@ const CCard = (props: any) => {
                     type="submit"
                     disabled={!isOwner}
                     onClick={async () => {
+                      setwWithdrawLoading(true);
                       const isOk = await withdraw(props.projectAddress);
+                      setwWithdrawLoading(false);
                       isOk && alert("Your withdraw is successfully completed.");
-                      removeCampaignWithId(props.deadline);
+                      isOk && removeCampaignWithId(props.deadline);
                     }}
                   >
+                    {withdrawLoading ? <LoadingCircle /> : null}
                     Withdraw & Finalize
                   </Button>
                   <Button
                     type="submit"
                     disabled={!isOwner}
                     onClick={async () => {
+                      setRefundLoading(true);
                       const isOk = await refund(props.projectAddress);
+                      setRefundLoading(false);
                       isOk && alert("Your refund is successfully completed.");
-                      removeCampaignWithId(props.deadline);
+                      isOk && removeCampaignWithId(props.deadline);
                     }}
                   >
+                    {refundLoading ? <LoadingCircle /> : null}
                     Refund & Finalize
                   </Button>
                 </div>

@@ -4,6 +4,7 @@ import { useAppSelector, useAppDispatch } from "../redux/hooks";
 import { addToCampaigns } from "../redux/reducers/campaigns";
 import { useRouter } from "next/router";
 import { createProject, payDeposit } from "../scripts/bfunctions";
+import LoadingCircle from "../components/LoadingCircle";
 
 function NewCampaign() {
   const [title, setTitle] = useState<string>("");
@@ -15,6 +16,7 @@ function NewCampaign() {
   const { userObject } = useAppSelector((state: any) => state.users);
   const dispatch = useAppDispatch();
   const { push } = useRouter();
+  const [loading, setLoading] = useState(false);
 
   // const payDepositFrontend = async () => {
   //   await payDeposit(userObject["address"], userPrivateKey, 0.001);
@@ -32,6 +34,7 @@ function NewCampaign() {
     const deadlineUnix = Math.floor(Date.now() / 1000) + deadline * 60 * 60; // Unix timestamp (s)
     console.log(typeof deadlineUnix, deadlineUnix);
     if (userAddress && deposit) {
+      setLoading(true);
       const campaignAddr = await createProject(
         userAddress,
         title,
@@ -40,7 +43,8 @@ function NewCampaign() {
         deadlineUnix,
         minAmount
       );
-      // console.log(campaignAddr);
+      setLoading(false);
+
       dispatch(
         addToCampaigns({
           projectAddress: campaignAddr,
@@ -58,43 +62,6 @@ function NewCampaign() {
         `Campaign successfully created at ${campaignAddr} and deposit is paid.`
       );
       push("/");
-      // const campaignObj = {
-      //   creatorAccount: userObject["address"],
-      //   title: title,
-      //   description: description,
-      //   targetAmount: targetAmount,
-      //   daysLimit: deadline,
-      //   minContribution: minAmount,
-      //   userPrivateKey: userPrivateKey,
-      // };
-      // console.log(campaignObj);
-      // fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/api/createProject`, {
-      //   method: "POST",
-      //   headers: {
-      //     "Content-Type": "application/json",
-      //   },
-      //   body: JSON.stringify(campaignObj),
-      // })
-      //   .then((res) => res.json())
-      //   .then((data) => {
-      //     alert(`Campaign successfully created at ${data["projectAddress"]}`);
-      //     console.log("successful");
-      //     const daysLimitToMs = deadline * 24 * 60 * 60 * 1000;
-      //     // Campaign interface is defined in redux
-      //     dispatch(
-      //       addToCampaigns({
-      //         projectAddress: data["projectAddress"],
-      //         creatorAccount: userObject["address"],
-      //         title: title,
-      //         description: description,
-      //         targetAmount: targetAmount,
-      //         deadline: Date.now() + daysLimitToMs,
-      //         minContribution: minAmount,
-      //         currentAmt: 0,
-      //       })
-      //     );
-      //   })
-      //   .catch((err) => console.error(err));
     } else {
       alert("You have to connect to your wallet first");
     }
@@ -193,14 +160,8 @@ function NewCampaign() {
               />
             </div>
             <div>
-              {/* <Button
-                type="submit"
-                className="p-6 font-extrabold"
-                onClick={payDepositFrontend}
-              >
-                Pay Deposit
-              </Button> */}
-              <Button type="submit" className="p-6 font-extrabold">
+              <Button type="submit" className="p-6 font-extrabold text-md">
+                {loading ? <LoadingCircle /> : null}
                 Create Campaign
               </Button>
             </div>

@@ -1,6 +1,5 @@
 import Footer from "./Footer";
 import Sidebar from "./Sidebar";
-
 const Layout = ({ children }: any) => {
   return (
     <div className="flex space-x-12">

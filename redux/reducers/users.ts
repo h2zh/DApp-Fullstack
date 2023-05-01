@@ -5,7 +5,8 @@ const usersSlice = createSlice({
     initialState: {
         userObject: {}, 
         userPrivateKey: "",
-        userProvider: {}
+        userProvider: {},
+        loading: false,
     },
     reducers: {
         setUserObject: (state, action) => {
@@ -16,9 +17,12 @@ const usersSlice = createSlice({
         },
         setUserProvider: (state, action) => {
             state.userProvider = action.payload;
+        },
+        setLoading: (state, action) => {
+            state.userProvider = action.payload;
         }
     }
 });
 
-export const {setUserObject, setUserPrivateKey, setUserProvider} = usersSlice.actions;
+export const {setUserObject, setUserPrivateKey, setUserProvider, setLoading} = usersSlice.actions;
 export default usersSlice.reducer;
