@@ -3,6 +3,12 @@ import { Text, Page, Code, Link, Button } from "@vercel/examples-ui";
 import { useAppSelector, useAppDispatch } from "../redux/hooks";
 import { setUserObject, setUserPrivateKey } from "../redux/reducers/users";
 import { useEffect, useState } from "react";
+import { useEvmNativeBalance } from "@moralisweb3/next";
+import Moralis from "moralis-v1";
+import { useMoralis } from "react-moralis";
+import { ethers } from "hardhat";
+
+// import { ethers } from "hardhat";
 
 // gets a prop from getServerSideProps
 function User({ user }: any) {
@@ -10,10 +16,27 @@ function User({ user }: any) {
     (state: any) => state.users
   );
   const dispatch = useAppDispatch();
+  const [userAddress, setUserAddress] = useState<string>("");
   const [pkey, setPkey] = useState("");
   const [lockPrivateKey, setLockPrivateKey] = useState(false);
-  console.log("pkey", pkey);
-  console.log("userPrivateKey", userPrivateKey);
+  // console.log("pkey", pkey);
+  // console.log("userPrivateKey", userPrivateKey);
+
+  const { isWeb3Enabled, isAuthenticated } = useMoralis();
+
+  const getProvider = async () => {
+    // const provider = await Moralis.enableWeb3();
+    // const myContract = new ethers.Contract(contractAddress, abi, provider);
+    let web3 = await Moralis.enableWeb3();
+    // const myContract = new ethers.Contract(contractAddress, abi, web3);
+    console.log("This is a Web3Provider object:", web3);
+  };
+
+  useEffect(() => {
+    if (isWeb3Enabled) {
+      getProvider();
+    }
+  }, [isWeb3Enabled]);
 
   // prevent static generated content differs from SSG content
   // https://github.com/vercel/next.js/discussions/35773?sort=top#discussioncomment-4846619
@@ -79,12 +102,7 @@ function User({ user }: any) {
             How to get my account's private key?
           </Link>
         </div>
-        <Button
-          width={100}
-          variant="black"
-          // className="bg-red-500"
-          onClick={handleSignOut}
-        >
+        <Button width={100} variant="black" onClick={handleSignOut}>
           Sign out
         </Button>
       </section>

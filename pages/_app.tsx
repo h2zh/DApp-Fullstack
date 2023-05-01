@@ -9,6 +9,7 @@ import { PersistGate } from "redux-persist/integration/react";
 import Layout from "../components/Layout";
 
 import "@vercel/examples-ui/globals.css";
+import { MoralisProvider } from "react-moralis";
 
 const { provider, webSocketProvider } = configureChains(
   [mainnet],
@@ -23,17 +24,19 @@ const client = createClient({
 
 function App({ Component, pageProps }: AppProps) {
   return (
-    <Provider store={store}>
-      <PersistGate loading={null} persistor={persistor}>
-        <Layout>
-          <WagmiConfig client={client}>
-            <SessionProvider session={pageProps.session} refetchInterval={0}>
-              <Component {...pageProps} />
-            </SessionProvider>
-          </WagmiConfig>
-        </Layout>
-      </PersistGate>
-    </Provider>
+    <MoralisProvider initializeOnMount={false}>
+      <Provider store={store}>
+        <PersistGate loading={null} persistor={persistor}>
+          <Layout>
+            <WagmiConfig client={client}>
+              <SessionProvider session={pageProps.session} refetchInterval={0}>
+                <Component {...pageProps} />
+              </SessionProvider>
+            </WagmiConfig>
+          </Layout>
+        </PersistGate>
+      </Provider>
+    </MoralisProvider>
   );
 }
 

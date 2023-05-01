@@ -57,6 +57,13 @@ server.post("/api/createProject", async (req, res) => {
   }
 });
 
+server.post("/api/payDeposit", async (req, res) => {
+  const { pAddr, userPrivateKey, targetAmount } = req.body;
+  console.log(req.body);
+  const _ = await payDeposit(pAddr, userPrivateKey, targetAmount * 0.01);
+  res.status(200).send();
+});
+
 server.get("/api/getAllProjects", async (req, res) => {
   console.log("getAllProjects triggered");
   const allProjects = await getAllProjects();
@@ -64,9 +71,34 @@ server.get("/api/getAllProjects", async (req, res) => {
 });
 
 server.post("/api/contribute", async (req, res) => {
-  console.log("contribute triggered");
-  const { projectAddr, creatorPrivateKey, depositAmount } = req.body;
-  await contribute(projectAddr, creatorPrivateKey, depositAmount);
+  console.log("/contribute triggered");
+  const { projectAddr, creatorPrivateKey, donation } = req.body;
+  console.log(projectAddr, creatorPrivateKey, donation);
+  await contribute(projectAddr, creatorPrivateKey, donation);
+  res.status(200).send();
+});
+
+server.post("/api/withdraw", async (req, res) => {
+  console.log("/api/withdraw triggered");
+  const { projectAddr } = req.body;
+  console.log(projectAddr);
+  await withdraw(projectAddr);
+  res.status(200).send();
+});
+
+server.post("/api/refund", async (req, res) => {
+  console.log("/api/refund triggered");
+  const { projectAddr } = req.body;
+  console.log(projectAddr);
+  await refund(projectAddr);
+  res.status(200).send();
+});
+
+server.post("/api/finalize", async (req, res) => {
+  console.log("/api/finalize triggered");
+  const { projectAddr } = req.body;
+  console.log(projectAddr);
+  await finalize(projectAddr);
   res.status(200).send();
 });
 

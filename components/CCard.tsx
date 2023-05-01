@@ -31,6 +31,7 @@ const CCard = (props: any) => {
       <h1 className=" text-xl text-gray font-semibold hover:text-sky-500 hover:cursor-pointer">
         {props.title}
       </h1>
+      <p>{props.admin}</p>
       <p className=" text-sm text-stone-800 tracking-tight">
         {props.description}
       </p>

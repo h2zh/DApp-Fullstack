@@ -3,7 +3,7 @@ require("@nomiclabs/hardhat-vyper");
 
 // Go to https://www.alchemyapi.io, sign up, create
 // a new App in its dashboard, and replace "KEY" with its key
-const ALCHEMY_API_KEY = "EJxYIMvbg3oIRTo1da1fyy7EQYlKmLJ7"; // XkLbgWXknSJnPb1NLTS_BbKAvrbNjf-P
+const ALCHEMY_API_KEY = "pRS_ZCMP9xjYC_qNr6nhK0WThqiJpsE9"; // XkLbgWXknSJnPb1NLTS_BbKAvrbNjf-P
 
 // Replace this private key with your Goerli account private key
 // To export your private key from Metamask, open Metamask and

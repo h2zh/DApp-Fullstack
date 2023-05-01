@@ -3,6 +3,7 @@ import { useState } from "react";
 import { useAppSelector, useAppDispatch } from "../redux/hooks";
 import { addToCampaigns } from "../redux/reducers/campaigns";
 import { useRouter } from "next/router";
+// import { payDeposit } from "../scripts/project";
 
 function NewCampaign() {
   const [title, setTitle] = useState<string>("");
@@ -19,6 +20,9 @@ function NewCampaign() {
 
   console.log(userPrivateKey);
 
+  // const payDepositFrontend = async () => {
+  //   await payDeposit(userObject["address"], userPrivateKey, 0.001);
+  // };
   const onSubmit = async (event: any) => {
     event.preventDefault();
     if (!userPrivateKey) {
@@ -166,9 +170,18 @@ function NewCampaign() {
                 value={deposit}
               />
             </div>
-            <Button type="submit" className="p-6 font-extrabold">
-              Create Campaign & Pay Deposit
-            </Button>
+            <div>
+              {/* <Button
+                type="submit"
+                className="p-6 font-extrabold"
+                onClick={payDepositFrontend}
+              >
+                Pay Deposit
+              </Button> */}
+              <Button type="submit" className="p-6 font-extrabold">
+                Create Campaign & Pay Deposit
+              </Button>
+            </div>
           </div>
         </form>
       </section>

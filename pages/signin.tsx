@@ -35,12 +35,13 @@ function SignIn() {
     // console.log(signature);
 
     // redirect user after success authentication to '/user' page
-    const { url }: any = await signIn("moralis-auth", {
+    const { url, provider }: any = await signIn("moralis-auth", {
       message,
       signature,
       redirect: false,
       callbackUrl: "/user",
     });
+    console.log("provider: ", provider);
     /**
      * instead of using signIn(..., redirect: "/user")
      * we get the url from callback (callbackUrl) and push it to the router to avoid page refreshing

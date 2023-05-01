@@ -94,10 +94,13 @@ async function payDeposit(projectAddr, creatorPrivateKey, depositAmount) {
   const projectContractWithSigner = projectContract.connect(creatorWallet);
 
   try {
-    gasLimit = 30000;
+    gasLimit = 21000;
+    // console.log("depositAmountInWei", depositAmountInWei, "gasLimit", gasLimit);
     await projectContractWithSigner.payDeposit({
       value: depositAmountInWei,
       gasLimit: gasLimit,
+      maxFeePerGas: 250000000000,
+      maxPriorityFeePerGas: 250000000000,
     });
     console.log("PayDeposit successful");
   } catch (error) {

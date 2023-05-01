@@ -12,6 +12,7 @@
   "dependencies": {
     "@headlessui/react": "^1.7.13",
     "@heroicons/react": "^1.0.6",
+    "@metamask/sdk": "^0.2.2",
     "@moralisweb3/next": "^2.18.4",
     "@nomicfoundation/hardhat-toolbox": "^2.0.2",
     "@nomiclabs/hardhat-vyper": "^3.0.3",
