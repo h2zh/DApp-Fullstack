@@ -21,8 +21,11 @@ const campaignsSlice = createSlice({
         modifyCampaigns: (state, action) => {
             state.campaigns = action.payload
         },
+        removeCampaigns: (state, action) => {
+            state.campaigns =  state.campaigns.filter(c => c.deadline !== action.payload) 
+        },
     }
 });
 
-export const {addToCampaigns, modifyCampaigns} = campaignsSlice.actions;
+export const {addToCampaigns, modifyCampaigns, removeCampaigns} = campaignsSlice.actions;
 export default campaignsSlice.reducer;

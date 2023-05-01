@@ -1,10 +1,9 @@
 import { Button } from "@vercel/examples-ui";
 import Link from "next/link";
 import React, { useState } from "react";
-import { contribute } from "../scripts/bfunctions";
 import { useAppSelector, useAppDispatch } from "../redux/hooks";
-import { modifyCampaigns } from "../redux/reducers/campaigns";
-import { withdraw, refund, finalize, getDetail } from "../scripts/bfunctions";
+import { modifyCampaigns, removeCampaigns } from "../redux/reducers/campaigns";
+import { contribute, withdraw, refund, getDetail } from "../scripts/bfunctions";
 
 enum CampaignState {
   Fundraising,
@@ -101,10 +100,21 @@ const CCard = (props: any) => {
     // console.log(isContributeSucceed);
     // check curAmt after contribute in console
     // await updateAmt(props.projectAddress);
-
+    isContributeSucceed &&
+      alert(`Thank you! Your contribution of ETH ${amount} is successful.`);
     addAmt(amount, props.deadline);
     setAmount(0);
   };
+
+  function removeCampaignWithId(key: any) {
+    // console.log(objWithIdIndex);
+
+    const updatedCampaigns = campaigns.filter((c: any) => c.deadline !== key);
+    console.log(updatedCampaigns);
+    dispatch(modifyCampaigns(updatedCampaigns));
+    console.log("Removal succeeded");
+    return true;
+  }
 
   return (
     <div className="card relative overflow-hidden my-3 space-y-2 ">
@@ -173,21 +183,23 @@ const CCard = (props: any) => {
                     type="submit"
                     disabled={!isOwner}
                     onClick={async () => {
-                      await withdraw(props.projectAddress);
-                      await finalize(props.projectAddress);
+                      const isOk = await withdraw(props.projectAddress);
+                      isOk && alert("Your withdraw is successfully completed.");
+                      removeCampaignWithId(props.deadline);
                     }}
                   >
-                    Withdraw
+                    Withdraw & Finalize
                   </Button>
                   <Button
                     type="submit"
                     disabled={!isOwner}
                     onClick={async () => {
-                      await refund(props.projectAddress);
-                      await finalize(props.projectAddress);
+                      const isOk = await refund(props.projectAddress);
+                      isOk && alert("Your refund is successfully completed.");
+                      removeCampaignWithId(props.deadline);
                     }}
                   >
-                    Refund
+                    Refund & Finalize
                   </Button>
                 </div>
               </>
@@ -195,15 +207,6 @@ const CCard = (props: any) => {
           )}
         </div>
       </div>
-
-      {/* {props.state !== "Successful" ? (
-        <div className="w-full bg-gray-200 rounded-full">
-          <div className="progress" style={{ width: `${props.progress}%` }}>
-            {" "}
-            {props.progress}%{" "}
-          </div>
-        </div>
-      ) : null} */}
     </div>
   );
 };

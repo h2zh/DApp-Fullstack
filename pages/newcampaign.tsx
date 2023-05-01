@@ -201,7 +201,7 @@ function NewCampaign() {
                 Pay Deposit
               </Button> */}
               <Button type="submit" className="p-6 font-extrabold">
-                Create Campaign & Pay Deposit
+                Create Campaign
               </Button>
             </div>
           </div>

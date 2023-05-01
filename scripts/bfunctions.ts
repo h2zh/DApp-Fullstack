@@ -151,8 +151,10 @@ export async function payDeposit(projectAddr:string, depositAmount:number) {
       const gasLimit = 100000;
       await connectedContract.finalize({ gasLimit: gasLimit });
       console.log("Finalize successful");
+      return true
     } catch (error) {
       console.error("Error:", error);
+      return false
     }
   }
   
@@ -178,8 +180,10 @@ export async function payDeposit(projectAddr:string, depositAmount:number) {
       const tx = await connectedContract.finalize({ gasLimit: gasLimit });
       await tx.wait()
       console.log("Finalize successful");
+      return true
     } catch (error) {
       console.error("Error:", error);
+      return false
     }
   }
 
