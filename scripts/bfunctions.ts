@@ -26,7 +26,12 @@ export async function createProject(
   );
 
   // new a project contract
-  const projectContract = new ethers.ContractFactory(contractABI, contractBytecode, adminSigner);
+  const provider = new ethers.providers.Web3Provider(window.ethereum);
+  // Prompt the user to connect their wallet to the dApp
+  await provider.send("eth_requestAccounts", []);
+  const signer = provider.getSigner();
+
+  const projectContract = new ethers.ContractFactory(contractABI, contractBytecode, signer);
   console.log(
     creatorAccount,
     title,
@@ -124,10 +129,14 @@ export async function payDeposit(projectAddr:string, depositAmount:number) {
   }
 
   export  async function withdraw(projectAddr: any) {
-    const projectContract = new ethers.Contract(projectAddr, contractABI, adminProvider);
-    const connectedContract = projectContract.connect(adminSigner);
+    const provider = new ethers.providers.Web3Provider(window.ethereum);
+    // Prompt the user to connect their wallet to the dApp
+    await provider.send("eth_requestAccounts", []);
+    const signer = provider.getSigner();
+    
+    const projectContract = new ethers.Contract(projectAddr, contractABI, provider);
+    const connectedContract = projectContract.connect(signer);
     //const creatorWallet = new hre.ethers.Wallet(creatorPrivateKey, hre.ethers.provider);
-    //const projectContractWithSigner = projectContract.connect(creatorWallet);
   
     try {
       const gasLimit = 100000;
@@ -136,16 +145,37 @@ export async function payDeposit(projectAddr:string, depositAmount:number) {
     } catch (error) {
       console.error("Error:", error);
     }
+
+    try {
+      const gasLimit = 100000;
+      await connectedContract.finalize({ gasLimit: gasLimit });
+      console.log("Finalize successful");
+    } catch (error) {
+      console.error("Error:", error);
+    }
   }
   
   export  async function refund(projectAddr:any) {
-    const projectContract = new ethers.Contract(projectAddr, contractABI, adminProvider);
-    const connectedContract = projectContract.connect(adminSigner);
+    const provider = new ethers.providers.Web3Provider(window.ethereum);
+    // Prompt the user to connect their wallet to the dApp
+    await provider.send("eth_requestAccounts", []);
+    const signer = provider.getSigner();
+
+    const projectContract = new ethers.Contract(projectAddr, contractABI, provider);
+    const connectedContract = projectContract.connect(signer);
 
     try {
       const gasLimit = 200000;
       await connectedContract.refund({ gasLimit: gasLimit });
       console.log("Refund successful");
+    } catch (error) {
+      console.error("Error:", error);
+    }
+    
+    try {
+      const gasLimit = 100000;
+      await connectedContract.finalize({ gasLimit: gasLimit });
+      console.log("Finalize successful");
     } catch (error) {
       console.error("Error:", error);
     }

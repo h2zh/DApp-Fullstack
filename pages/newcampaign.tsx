@@ -53,7 +53,7 @@ function NewCampaign() {
           currentAmt: 0,
         })
       );
-      await payDeposit(campaignAddr, deposit);
+      // await payDeposit(campaignAddr, deposit);
       alert(
         `Campaign successfully created at ${campaignAddr} and deposit is paid.`
       );
