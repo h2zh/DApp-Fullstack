@@ -113,6 +113,7 @@ export async function payDeposit(projectAddr:string, depositAmount:number) {
 
   export  async function withdraw(projectAddr: any) {
     const projectContract = new ethers.Contract(projectAddr, contractABI, adminProvider);
+    const connectedContract = projectContract.connect(adminSigner);
     //const creatorWallet = new hre.ethers.Wallet(creatorPrivateKey, hre.ethers.provider);
     //const projectContractWithSigner = projectContract.connect(creatorWallet);
   
@@ -127,7 +128,8 @@ export async function payDeposit(projectAddr:string, depositAmount:number) {
   
   export  async function refund(projectAddr:any) {
     const projectContract = new ethers.Contract(projectAddr, contractABI, adminProvider);
-  
+    const connectedContract = projectContract.connect(adminSigner);
+
     try {
       const gasLimit = 200000;
       await projectContract.refund({ gasLimit: gasLimit });
@@ -139,6 +141,7 @@ export async function payDeposit(projectAddr:string, depositAmount:number) {
   
  export async function finalize(projectAddr:any) {
     const projectContract = new ethers.Contract(projectAddr, contractABI, adminProvider);
+  const connectedContract = projectContract.connect(adminSigner);
   
     try {
       const gasLimit = 100000;

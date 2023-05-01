@@ -27,7 +27,10 @@ function NewCampaign() {
     }
 
     const userAddress = userObject["address"];
-    const deadlineUnix = Date.now() + deadline * 24 * 60 * 60;
+    console.log("deadline:", deadline);
+    // block.timestamp is a uint256 value in seconds
+    const deadlineUnix = Math.floor(Date.now() / 1000) + deadline * 60 * 60; // Unix timestamp (s)
+    console.log(typeof deadlineUnix, deadlineUnix);
     if (userAddress && deposit) {
       const campaignAddr = await createProject(
         userAddress,
@@ -37,8 +40,7 @@ function NewCampaign() {
         deadlineUnix,
         minAmount
       );
-      console.log(campaignAddr);
-
+      // console.log(campaignAddr);
       dispatch(
         addToCampaigns({
           projectAddress: campaignAddr,
@@ -165,12 +167,12 @@ function NewCampaign() {
 
             <div className="flex flex-col items-left space-y-4">
               <span className="block text-md font-medium text-slate-700">
-                Due in how many days
+                Due in how many hours
               </span>
               <input
                 className="form-input border-2 border-slate-500 rounded-md p-3"
                 type="number" // datetime-local
-                placeholder="How many days later is it due?"
+                placeholder="How many hours later is it due?"
                 value={deadline}
                 onChange={(e) => setDeadline(parseInt(e.target.value))}
               />

@@ -51,12 +51,8 @@ const CCard = (props: any) => {
 
   const dispatch = useAppDispatch();
   const [amount, setAmount] = useState<number>();
-  const date = new Date(props.deadline);
-  let state = getState(
-    props.deadline,
-    props.has_raised_amount,
-    props.target_amount
-  );
+  const date = new Date(props.deadline * 1000); // convert deadline in s to ms
+  let state = getState(date, props.has_raised_amount, props.target_amount);
 
   const addAmt = (amt: number, id: any) => {
     const newCampaigns = campaigns.map((c: any) => {
@@ -149,30 +145,32 @@ const CCard = (props: any) => {
               </p>
             </>
           ) : (
-            <>
-              <div className="flex flex-row space-x-4">
-                <Button
-                  type="submit"
-                  disabled={!isOwner}
-                  onClick={async () => {
-                    await withdraw(props.projectAddress);
-                    await finalize(props.projectAddress);
-                  }}
-                >
-                  Withdraw
-                </Button>
-                <Button
-                  type="submit"
-                  disabled={!isOwner}
-                  onClick={async () => {
-                    await refund(props.projectAddress);
-                    await finalize(props.projectAddress);
-                  }}
-                >
-                  Refund
-                </Button>
-              </div>
-            </>
+            isOwner && (
+              <>
+                <div className="flex flex-row space-x-4">
+                  <Button
+                    type="submit"
+                    disabled={!isOwner}
+                    onClick={async () => {
+                      await withdraw(props.projectAddress);
+                      await finalize(props.projectAddress);
+                    }}
+                  >
+                    Withdraw
+                  </Button>
+                  <Button
+                    type="submit"
+                    disabled={!isOwner}
+                    onClick={async () => {
+                      await refund(props.projectAddress);
+                      await finalize(props.projectAddress);
+                    }}
+                  >
+                    Refund
+                  </Button>
+                </div>
+              </>
+            )
           )}
         </div>
       </div>
