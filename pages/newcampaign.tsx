@@ -58,9 +58,7 @@ function NewCampaign() {
         })
       );
       // await payDeposit(campaignAddr, deposit);
-      alert(
-        `Campaign successfully created at ${campaignAddr} and deposit is paid.`
-      );
+      alert(`Campaign successfully created at ${campaignAddr}.`);
       push("/");
     } else {
       alert("You have to connect to your wallet first");
