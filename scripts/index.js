@@ -19,7 +19,7 @@ const port = process.env.SERVER_PORT || 8080;
 server.use(cors());
 server.use(bodyParser.json());
 server.post("/api/createProject", async (req, res) => {
-  //   let creatorAccount = "0x620e4C6680a0C6B09673CBC2A6f1E73EEb34a2f0",
+  //   let creatorAccount = "",
   //     title = "testtt",
   //     description = "dasfds",
   //     targetAmount = 2,

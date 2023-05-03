@@ -1,12 +1,12 @@
 import {ethers} from "ethers";
 import web3 from "web3";
-import contractJSON from "./crowdfundingProject.json";
+import contractJSON from "../artifacts/contracts/crowdfundingProject.vy/crowdfundingProject.json";
 const contractABI = contractJSON.abi;
 const contractBytecode = contractJSON.bytecode;
-const adminProvider = new ethers.providers.JsonRpcProvider(`https://eth-goerli.alchemyapi.io/v2/pRS_ZCMP9xjYC_qNr6nhK0WThqiJpsE9`);
-const adminPrivateKey = "7740f7ae4a285d3da1a79c1512a05f3f580faf9b347b31410bce4903000626d1";
-const adminSigner = new ethers.Wallet(adminPrivateKey, adminProvider);
-const adminAccount = "0xB0Bc4B6080Bd46f3225B4A684a7Bf8f300dd9ebA"
+const adminProvider = new ethers.providers.JsonRpcProvider(process.env.NEXT_PUBLIC_ALCHEMY_ADMIN_URL);
+const adminPrivateKey = process.env.NEXT_PUBLIC_ADMIN_PRIVATE_KEY;
+const adminSigner = new ethers.Wallet(adminPrivateKey, adminProvider); // false alarm
+const adminAccount = process.env.NEXT_PUBLIC_ADMIN_ACCOUNT
 
  // creatorAccount is the account of
 // targetAmount, minContribution in Ether
