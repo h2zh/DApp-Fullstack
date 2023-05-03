@@ -10,7 +10,7 @@ https://user-images.githubusercontent.com/61568048/236045303-7fb0b26b-a04c-4d7e-
 
 Vyper, Hardhat, Ethers.js, Web3
 
-Express.js, Next.js, Redux Toolkit, NextAuth, Moralis, Typescript, Tailwind CSS
+Next.js, Redux Toolkit, NextAuth, Moralis, Typescript, Express.js, Tailwind CSS
 
 ## How to Clone and Deploy
 
@@ -39,18 +39,12 @@ Next, run Next.js in development mode:
 pnpm dev
 ```
 
-Open another terminal to run the Express.js backend server:
-
-```bash
-node scripts
-```
-
 Now you can open http://localhost:3000 to use this platform!
 
 ## Project Description
 
 Our goal is to create a decentralized crowdfunding platform that leverages the power of smart contracts and blockchain technology. This approach allows users to initiate fundraising campaigns, while enabling anyone to contribute with confidence. Through the use of immutable, decentralized ledgers, each contribution is securely recorded and tracked.
 
-To enhance transparency and mitigate potential fraud, the fundraising process requires approval from the majority of contributors before funds can be withdrawn from the smart contract. This collaborative decision-making process fosters trust and accountability within the platform.
+To enhance transparency and mitigate potential fraud, we don't charge users throughout the whole fundraising process, except for when the user withdraws from the smart contract. The only fees that users will need to pay are for the gases collected by the Ethereum network when they perform operations such as creating a campaign, making a contribution, withdrawing funds, or requesting a refund. This approach gives users complete control over their fundraising campaigns, fostering trust and accountability within the platform.
 
 By eliminating intermediaries, our decentralized crowdfunding solution reduces costs and opens the door to a broader spectrum of individuals and projects.
