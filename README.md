@@ -2,6 +2,10 @@
 
 By Nian Lu, Howard Zhong, Anyong Mao
 
+## Video Walkthrough
+
+https://user-images.githubusercontent.com/61568048/236045303-7fb0b26b-a04c-4d7e-9aa9-c00967a69871.mp4
+
 ## Tech Stack
 
 Vyper, Hardhat, Ethers.js, Web3
