@@ -11,7 +11,7 @@ const ALCHEMY_API_KEY = process.env.ALCHEMY_API_KEY;
 // To export your private key from Metamask, open Metamask and
 // go to Account Details > Export Private Key
 // Beware: NEVER put real Ether into testing accounts
-const GOERLI_PRIVATE_KEY = process.env.GOERLI_PRIVATE_KEY;
+const GOERLI_PRIVATE_KEY = process.env.NEXT_PUBLIC_ADMIN_PRIVATE_KEY;
 
 /** @type import('hardhat/config').HardhatUserConfig */
 module.exports = {
